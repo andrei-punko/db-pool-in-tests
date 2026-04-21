@@ -1,7 +1,7 @@
 package by.andd3dfx.example;
 
-import by.andd3dfx.DatabasePoolLifecycleService;
-import by.andd3dfx.DatabasePoolTimeLoggingExtension;
+import by.andd3dfx.db.pool.DatabasePoolLifecycleService;
+import by.andd3dfx.db.pool.DatabasePoolTimeLoggingExtension;
 import by.andd3dfx.testcontainers.ContainersLifecycleSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +12,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Example: Testcontainers PostgreSQL + dynamic properties + clone pool from the library.
@@ -39,7 +41,8 @@ class ExampleDbPoolApplicationTest {
 
     @Test
     void jdbcSeesDatabaseFromPool() {
-        Integer one = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
-        assert one != null && one == 1;
+        Integer result = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
+
+        assertThat(result).isEqualTo(1);
     }
 }

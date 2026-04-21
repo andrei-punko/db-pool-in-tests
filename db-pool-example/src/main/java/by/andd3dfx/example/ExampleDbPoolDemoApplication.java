@@ -1,6 +1,7 @@
 package by.andd3dfx.example;
 
-import by.andd3dfx.DbPoolTestSupportConfiguration;
+import by.andd3dfx.db.config.DbPoolTestSupportConfiguration;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
@@ -12,6 +13,6 @@ import org.springframework.context.annotation.Import;
 public class ExampleDbPoolDemoApplication {
 
     public static void main(String[] args) {
-        org.springframework.boot.SpringApplication.run(ExampleDbPoolDemoApplication.class, args);
+        SpringApplication.run(ExampleDbPoolDemoApplication.class, args);
     }
 }
