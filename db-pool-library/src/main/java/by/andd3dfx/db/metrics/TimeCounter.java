@@ -1,4 +1,4 @@
-package by.andd3dfx;
+package by.andd3dfx.db.metrics;
 
 /**
  * Collects timing statistics for events (DB creation, pool wait time).

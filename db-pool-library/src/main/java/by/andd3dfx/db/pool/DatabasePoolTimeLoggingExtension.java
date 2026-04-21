@@ -1,5 +1,6 @@
-package by.andd3dfx;
+package by.andd3dfx.db.pool;
 
+import by.andd3dfx.db.metrics.Metrics;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;

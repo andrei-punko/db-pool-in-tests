@@ -1,4 +1,4 @@
-package by.andd3dfx;
+package by.andd3dfx.db.model;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * A prepared database name or an error produced during preparation.
  */
-record PreparedDatabase(String databaseName, Throwable error) {
+public record PreparedDatabase(String databaseName, Throwable error) {
 
     public boolean isSuccess() {
         return databaseName != null && error == null;

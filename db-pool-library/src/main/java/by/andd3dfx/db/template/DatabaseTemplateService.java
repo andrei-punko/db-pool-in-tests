@@ -1,5 +1,8 @@
-package by.andd3dfx;
+package by.andd3dfx.db.template;
 
+import by.andd3dfx.db.datasource.DataSourceFactory;
+import by.andd3dfx.db.datasource.RoutingDataSource;
+import by.andd3dfx.db.config.TestDatabaseSchemaPreparer;
 import by.andd3dfx.sql.SqlScriptSupport;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
