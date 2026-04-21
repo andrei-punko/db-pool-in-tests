@@ -1,5 +1,8 @@
 # DB pool in tests
 
+[![Maven CI](https://github.com/andrei-punko/db-pool-in-tests/actions/workflows/maven.yml/badge.svg)](https://github.com/andrei-punko/db-pool-in-tests/actions/workflows/maven.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)](LICENSE)
+
 Многомодульный Maven-проект: **библиотека** для пула изолированных тестовых баз PostgreSQL (клонирование из template) и **пример** подключения в Spring Boot + Testcontainers.
 
 - **Java 21**, **Spring Boot 3.5.x**
