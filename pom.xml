@@ -16,7 +16,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>db-pool-in-tests</name>
-    <description>Модульная сборка: библиотека пула тестовых БД и пример использования</description>
+    <description>Multi-module build: test DB pool library and a usage example</description>
 
     <modules>
         <module>db-pool-library</module>

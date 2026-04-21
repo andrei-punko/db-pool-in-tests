@@ -5,7 +5,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import java.util.Objects;
 
 /**
- * Имя подготовленной БД или ошибка при создании.
+ * A prepared database name or an error produced during preparation.
  */
 record PreparedDatabase(String databaseName, Throwable error) {
 

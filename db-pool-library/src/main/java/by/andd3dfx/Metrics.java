@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Метрики ожидания пула и времени создания БД.
+ * Pool wait time and database creation metrics.
  */
 @Slf4j
 @Component

@@ -14,7 +14,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
 /**
- * Пример: Testcontainers PostgreSQL + динамические свойства + пул клонов из библиотеки.
+ * Example: Testcontainers PostgreSQL + dynamic properties + clone pool from the library.
  */
 @SpringBootTest(classes = ExampleDbPoolDemoApplication.class)
 @ActiveProfiles({"it", "testcontainer"})

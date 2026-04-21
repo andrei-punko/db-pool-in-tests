@@ -27,8 +27,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Пул заранее созданных тестовых БД для ускорения интеграционных тестов.
- * Рассчитан на последовательный запуск тестов.
+ * A pool of pre-created test databases to speed up integration tests.
+ * <p>
+ * Designed for sequential test execution.
  */
 @Slf4j
 @Component

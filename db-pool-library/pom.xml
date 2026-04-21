@@ -13,7 +13,7 @@
     <artifactId>db-pool-library</artifactId>
     <packaging>jar</packaging>
     <name>db-pool-library</name>
-    <description>Пул тестовых БД и вспомогательные классы для интеграционных тестов</description>
+    <description>Test database pool and supporting classes for integration tests</description>
 
     <dependencies>
         <dependency>

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 
 /**
- * Фабрика тестовых {@link DataSource}: пул Hikari для клонов и непуловый {@link PGSimpleDataSource} для template.
+ * Factory for test {@link DataSource} instances: Hikari pool for clones and non-pooled {@link PGSimpleDataSource} for template DB work.
  */
 @Component
 @RequiredArgsConstructor

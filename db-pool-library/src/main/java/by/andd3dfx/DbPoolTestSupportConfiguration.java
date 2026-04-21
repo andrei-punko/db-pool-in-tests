@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 /**
- * Подключите в интеграционных тестах (профиль {@code it}): {@code @Import(DbPoolTestSupportConfiguration.class)}.
+ * Use in integration tests (profile {@code it}): {@code @Import(DbPoolTestSupportConfiguration.class)}.
  * <p>
- * Для кастомной подготовки схемы template-БД объявите свой бин {@link TestDatabaseSchemaPreparer}.
+ * To customize template schema preparation, provide your own {@link TestDatabaseSchemaPreparer} bean.
  */
 @Configuration(proxyBeanMethods = false)
 @Profile("it")

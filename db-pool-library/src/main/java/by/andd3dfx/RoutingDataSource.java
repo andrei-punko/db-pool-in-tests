@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Маршрутизация к разным БД в тестах: системная БД, template, выдача имён из {@link DatabasePool}.
+ * Routes connections to different databases in tests: system DB, template DB, and per-test clones from {@link DatabasePool}.
  */
 @Slf4j
 @AllArgsConstructor

@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
 /**
- * Минимальное приложение для демонстрации: импорт конфигурации пула БД в интеграционных тестах.
+ * Minimal demo application: imports the DB pool configuration for integration tests.
  */
 @SpringBootApplication
 @Import(DbPoolTestSupportConfiguration.class)

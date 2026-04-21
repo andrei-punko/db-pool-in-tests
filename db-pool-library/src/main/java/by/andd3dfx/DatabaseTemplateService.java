@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 
 /**
- * Создание и наполнение template-БД для быстрого клонирования в интеграционных тестах.
+ * Creates and populates a template database for fast cloning in integration tests.
  */
 @Slf4j
 @Component

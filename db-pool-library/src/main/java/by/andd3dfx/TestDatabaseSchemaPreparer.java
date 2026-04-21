@@ -1,7 +1,7 @@
 package by.andd3dfx;
 
 /**
- * Дополнительная подготовка схемы в template-БД после {@code db-init.sql}.
+ * Optional schema preparation step for the template database after {@code db-init.sql}.
  */
 @FunctionalInterface
 public interface TestDatabaseSchemaPreparer {

@@ -8,7 +8,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
- * Во время прогона тестов: старт метода, длительность, метрики пула после метода, сводка по созданию БД после класса.
+ * During test execution: log method start, duration, pool metrics after each method,
+ * and database creation stats after the test class.
  */
 @Slf4j
 public class DatabasePoolTimeLoggingExtension implements BeforeEachCallback, AfterEachCallback, AfterAllCallback {

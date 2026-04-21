@@ -1,7 +1,7 @@
 package by.andd3dfx;
 
 /**
- * Сбор статистики по времени событий (создание БД, ожидание пула).
+ * Collects timing statistics for events (DB creation, pool wait time).
  */
 class TimeCounter {
 

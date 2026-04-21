@@ -29,7 +29,7 @@ public class ContainersLifecycleSupport {
     }
 
     public static void init() {
-        // контейнер стартует в POSTGRESQL_CONTAINER_START_RESULT
+        // container startup is scheduled in POSTGRESQL_CONTAINER_START_RESULT
     }
 
     private static boolean isTestProfile() {

@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 /**
- * Подключается в профиле {@code it}: маршрутизируемый DataSource для пула тестовых БД.
+ * Enabled under profile {@code it}: provides a routing DataSource for the test database pool.
  */
 @Profile("it")
 @Configuration(proxyBeanMethods = false)

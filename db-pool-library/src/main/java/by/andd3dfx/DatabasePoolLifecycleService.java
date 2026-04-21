@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Инициализация {@link DatabasePool} при подъёме контекста и корректное завершение при остановке.
+ * Initializes {@link DatabasePool} on context startup and shuts it down gracefully on context stop.
  */
 @Slf4j
 @Component

@@ -3,48 +3,48 @@
 [![Maven CI](https://github.com/andrei-punko/db-pool-in-tests/actions/workflows/maven.yml/badge.svg)](https://github.com/andrei-punko/db-pool-in-tests/actions/workflows/maven.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)](LICENSE)
 
-Многомодульный Maven-проект: **библиотека** для пула изолированных тестовых баз PostgreSQL (клонирование из template) и **пример** подключения в Spring Boot + Testcontainers.
+A multi-module Maven project: a **library** that provides a pool of isolated PostgreSQL databases for integration tests (fast cloning from a template database), plus an **example** Spring Boot + Testcontainers setup.
 
 - **Java 21**, **Spring Boot 3.5.x**
-- **PostgreSQL 16** в контейнере (образ задаётся в `PostgresContainerFactory`)
+- **PostgreSQL 16** in a container (image is set in `PostgresContainerFactory`)
 
-## Структура
+## Structure
 
-| Модуль | Артефакт | Назначение |
+| Module | Artifact | Purpose |
 |--------|-----------|------------|
-| `db-pool-library` | `by.andd3dfx:db-pool-library` | Классы пула, маршрутизация `DataSource`, Testcontainers-хелперы, расширение JUnit для логов метрик |
-| `db-pool-example` | `by.andd3dfx:db-pool-example` | Минимальное приложение и интеграционный тест, показывающий типичную связку |
+| `db-pool-library` | `by.andd3dfx:db-pool-library` | Pool implementation, `DataSource` routing, Testcontainers helpers, JUnit extension for metrics/logging |
+| `db-pool-example` | `by.andd3dfx:db-pool-example` | Minimal app and a test that demonstrates typical wiring |
 
-Корневой `pom.xml` — агрегатор (`packaging pom`), общий `dependencyManagement` для Testcontainers BOM.
+The root `pom.xml` is an aggregator (`packaging pom`) and contains shared `dependencyManagement` for the Testcontainers BOM.
 
-## Сборка
+## Build
 
-Из каталога проекта:
+From the project directory:
 
 ```bash
 mvn clean verify
 ```
 
-- Собирается библиотека, затем пример.
-- Для примеров с Testcontainers нужен **Docker** (или совместимый runtime).
+- Builds the library first, then the example.
+- The example requires **Docker** (or a compatible runtime) for Testcontainers.
 
-Только библиотека в локальный репозиторий:
+Install only the library into the local repository:
 
 ```bash
 mvn clean install -pl db-pool-library
 ```
 
-## Идея работы
+## How it works
 
-1. Поднимается одна «системная» БД (часто через Testcontainers).
-2. Создаётся **template**-база `integration_template_db`: схема из `classpath:/db/db-init.sql` и опциональная доработка через бин `TestDatabaseSchemaPreparer`.
-3. В **фоне** наполняется пул **клонов** (`CREATE DATABASE … WITH TEMPLATE … STRATEGY FILE_COPY`); каждому тесту выдаётся отдельная БД, после теста — освобождение и отложенное удаление.
+1. A single “system” database is provided (often via Testcontainers).
+2. A **template** database `integration_template_db` is created: schema is applied from `classpath:/db/db-init.sql`, then optionally extended via a `TestDatabaseSchemaPreparer` bean.
+3. A background worker fills a pool of **clones** (`CREATE DATABASE … WITH TEMPLATE … STRATEGY FILE_COPY`). Each test gets its own database; after the test it is released and scheduled for deferred drop.
 
-Имя JDBC URL для подстановки имён клонов должно содержать сегмент вида `/test_<что угодно>` — его `DataSourceFactory` заменяет на имя выданной базы (см. пример в `db-pool-example`).
+To enable per-test DB name substitution, the JDBC URL must contain a segment like `/test_<anything>` — `DataSourceFactory` replaces that segment with the assigned clone DB name (see `db-pool-example`).
 
-## Подключение в своём проекте
+## Using it in your project
 
-1. Зависимость (обычно **`scope` `test`**):
+1. Add the dependency (typically with **`scope` `test`**):
 
 ```xml
 <dependency>
@@ -55,7 +55,7 @@ mvn clean install -pl db-pool-library
 </dependency>
 ```
 
-2. Включить конфигурацию пула только в интеграционных тестах — профиль **`it`** и импорт:
+2. Enable the pool configuration only for integration tests: use profile **`it`** and import the configuration:
 
 ```java
 @SpringBootApplication
@@ -63,22 +63,22 @@ mvn clean install -pl db-pool-library
 public class MyApplicationUnderTest { }
 ```
 
-или `@Import(DbPoolTestSupportConfiguration.class)` на `@TestConfiguration`.
+or place `@Import(DbPoolTestSupportConfiguration.class)` on a `@TestConfiguration`.
 
-3. **`ContainersLifecycleSupport`** в тестах читает **system property** `spring.profiles.active` и подставляет URL/username контейнера через `@DynamicPropertySource`. Задайте её в **Surefire** (как в `db-pool-example/pom.xml`) или в IDE для конфигурации запуска.
+3. In tests, **`ContainersLifecycleSupport`** checks the **system property** `spring.profiles.active` and registers container URL/username via `@DynamicPropertySource`. Set it in **Surefire** (as in `db-pool-example/pom.xml`) or in your IDE run configuration.
 
-4. Дополнительная подготовка схемы после `db-init.sql` — свой бин **`TestDatabaseSchemaPreparer`** (если не объявить, используется no-op из конфигурации).
+4. Additional schema preparation after `db-init.sql` is done via a **`TestDatabaseSchemaPreparer`** bean (if you don’t provide one, a no-op implementation is used).
 
-5. По желанию: **`@ExtendWith(DatabasePoolTimeLoggingExtension.class)`** — логи старта/окончания метода, `[db-pool-stats]`, после класса `[db-creation-stats]`. Для видимости включите уровень логов для пакета `by.andd3dfx` (например `INFO`).
+5. Optional: **`@ExtendWith(DatabasePoolTimeLoggingExtension.class)`** prints per-test start/finish messages, `[db-pool-stats]` after each test, and `[db-creation-stats]` after the test class. Make sure logging for package `by.andd3dfx` is enabled (e.g. `INFO`).
 
-6. После каждого теста, если используете пул, вызывайте **`DatabasePoolLifecycleService.releaseCurrentDatabase()`** (последовательный запуск; параллельный — отдельная доработка).
+6. After each test, call **`DatabasePoolLifecycleService.releaseCurrentDatabase()`** if you use the pool (current implementation assumes sequential execution; parallel tests require additional work).
 
-## Имена тестов и Maven
+## Test naming and Maven
 
-У Spring Boot по умолчанию классы **`*IT`** относятся к **Failsafe** (`integration-test`), а не к Surefire (`test`). Чтобы тесты выполнялись при **`mvn test`**, используйте суффикс **`*Test` / `*Tests`** или настройте плагины явно (см. `db-pool-example`).
+In Spring Boot defaults, classes named **`*IT`** are intended for **Failsafe** (`integration-test`), not Surefire (`test`). If you want the example to run on **`mvn test`**, use **`*Test` / `*Tests`** naming or configure plugins explicitly (see `db-pool-example`).
 
-## Основные точки расширения
+## Main extension points
 
-- **`TestDatabaseSchemaPreparer`** — свой SQL/миграции поверх template.
-- **`PostgresContainerFactory.IMAGE`** — версия образа Postgres (в CI иногда выносят в свойство).
-- Ресурс **`db/db-init.sql`** в библиотеке — минимальный init; при необходимости переопределите или дополните скриптами в своём `test/resources`.
+- **`TestDatabaseSchemaPreparer`**: custom SQL/migrations on top of the template.
+- **`PostgresContainerFactory.IMAGE`**: Postgres image version (often externalized in CI).
+- **`db/db-init.sql`** (in the library): minimal init; override/extend it with additional scripts from your own `test/resources` if needed.
