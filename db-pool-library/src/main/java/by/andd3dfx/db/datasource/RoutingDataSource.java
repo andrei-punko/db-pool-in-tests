@@ -4,7 +4,6 @@ import by.andd3dfx.db.pool.DatabasePool;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
@@ -14,7 +13,11 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Routes connections to different databases in tests: system DB, template DB, and per-test clones from {@link DatabasePool}.
+ * Custom RoutingDataSource for testing that allows dynamic switching between multiple DataSources
+ * <p>
+ * For regular test execution flow it asks {@link DatabasePool} for the next database name.
+ * It also supports temporary override via {@link #withCurrentDb(String, Runnable)} for
+ * operations that must run against a specific datasource key.
  */
 @Slf4j
 @AllArgsConstructor
@@ -23,6 +26,9 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
     public static final String SYSTEM_DB_KEY = "system";
 
     private final Map<String, DataSource> dbNameToDataSourceMap = new ConcurrentHashMap<>();
+    /**
+     * Temporary routing override to specific code block (for example, template initialization flow)
+     */
     private final ThreadLocal<String> overriddenDbName = new ThreadLocal<>();
     private final DataSourceFactory dataSourceFactory;
     private final DatabasePool databasePool;
@@ -65,7 +71,7 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
     }
 
     @Override
-    protected @NonNull DataSource determineTargetDataSource() {
+    protected DataSource determineTargetDataSource() {
         String dbName = determineCurrentLookupKey();
         DataSource dataSource = dbNameToDataSourceMap.get(dbName);
         if (dataSource == null) {
@@ -82,6 +88,10 @@ public class RoutingDataSource extends AbstractRoutingDataSource {
         overriddenDbName.set(dbName);
     }
 
+    /**
+     * Resets current DB override and disposes the corresponding datasource entry.
+     * Method is idempotent and does nothing when override is already cleared.
+     */
     private void resetCurrentDbAndDisposeDataSource() {
         String dbName = overriddenDbName.get();
         if (dbName == null) {

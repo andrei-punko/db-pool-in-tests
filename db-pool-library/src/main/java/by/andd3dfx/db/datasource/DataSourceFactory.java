@@ -3,7 +3,6 @@ package by.andd3dfx.db.datasource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -14,7 +13,10 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 
 /**
- * Factory for test {@link DataSource} instances: Hikari pool for clones and non-pooled {@link PGSimpleDataSource} for template DB work.
+ * Factory for creating test {@link DataSource} instances.
+ * <p>
+ * Creates pooled {@link HikariDataSource} for per-test databases and
+ * non-pooled {@link PGSimpleDataSource} for template database initialization.
  */
 @Component
 @RequiredArgsConstructor
@@ -26,10 +28,16 @@ public class DataSourceFactory {
     private final DataSourceProperties dataSourceProperties;
     private final Environment environment;
 
+    /**
+     * Creates a pooled datasource for a test database.
+     */
     public DataSource createHikariDataSource(String dbName) {
         return new HikariDataSource(buildHikariConfig(dbName));
     }
 
+    /**
+     * Creates a non-pooled datasource for template database operations.
+     */
     public DataSource createTemplateDataSource(String dbName) {
         PGSimpleDataSource pgDataSource = new PGSimpleDataSource();
         pgDataSource.setUrl(buildJdbcUrl(dbName));
@@ -39,7 +47,7 @@ public class DataSourceFactory {
         return pgDataSource;
     }
 
-    private @NonNull HikariConfig buildHikariConfig(String dbName) {
+    private HikariConfig buildHikariConfig(String dbName) {
         HikariConfig config = new HikariConfig();
         HikariConfig hikariConfig = Binder.get(environment).bindOrCreate("spring.datasource.hikari", HikariConfig.class);
         hikariConfig.copyStateTo(config);
@@ -52,7 +60,7 @@ public class DataSourceFactory {
         return config;
     }
 
-    private @NonNull String buildJdbcUrl(String dbName) {
+    private String buildJdbcUrl(String dbName) {
         return dataSourceProperties.getUrl().replaceFirst("/test[a-zA-Z0-9_-]*", "/" + dbName);
     }
 }

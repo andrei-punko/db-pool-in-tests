@@ -7,7 +7,12 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Pool wait time and database creation metrics.
+ * <pre>
+ * Collect & log:
+ * - Amount of times when test could not get prepared DB from pool (and because of that new DB creation was initiated)
+ * - DB creation statistics
+ * - DB pool wait statistics
+ * </pre>
  */
 @Slf4j
 @Component

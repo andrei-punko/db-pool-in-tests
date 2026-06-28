@@ -1,6 +1,6 @@
 package by.andd3dfx.sql;
 
-import org.apache.commons.lang3.StringUtils;
+import by.andd3dfx.utils.TestResourceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Service
-public class SqlScriptSupport {
+public class SqlSupport {
 
     @Autowired
     private DataSource defaultDataSource;
@@ -54,7 +54,7 @@ public class SqlScriptSupport {
             databasePopulator.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
             databasePopulator.execute(dataSource);
         } catch (ScriptStatementFailedException e) {
-            throw new RuntimeException("Schema preparation failed: " + StringUtils.truncate(e.getMessage(), 500));
+            throw new RuntimeException("Schema preparation failed: " + e.getMessage(), e);
         }
     }
 
@@ -109,7 +109,25 @@ public class SqlScriptSupport {
         };
     }
 
-    public void executeSqlAsSingleStatement(String sql, String prefix, String suffix) {
+    public void prepareCurrentSchema() {
+        /*
+        executeScriptsAsSingleStatement("file:schema-create-auto.sql", "classpath:/data.sql", "classpath:/data-it.sql");
+         */
+    }
+
+    public void executeResourceAsSingleStatement(String resourceName) {
+        executeResourceAsSingleStatement(resourceName, "", "");
+    }
+
+    public void executeResourceAsSingleStatement(String resourceName, String prefix, String suffix) {
+        executeSqlAsSingleStatement(TestResourceUtils.readToString(resourceName), prefix, suffix);
+    }
+
+    public void executeSqlAsSingleStatementInBeginEndBlock(String sql) {
+        executeSqlAsSingleStatement(sql, "do $$ begin", "end; $$;");
+    }
+
+    private void executeSqlAsSingleStatement(String sql, String prefix, String suffix) {
         DatabasePopulatorUtils.execute(connection -> {
             final PreparedStatement preparedStatement = connection.prepareStatement(prefix + " " + sql + " " + suffix);
             try (preparedStatement) {

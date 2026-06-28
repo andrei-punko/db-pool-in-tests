@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.jspecify.annotations.NonNull;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
@@ -31,17 +30,29 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * A pool of pre-created test databases to speed up integration tests.
+ * Maintains a pool of pre-created test databases to reduce startup time for tests.
  * <p>
- * Designed for sequential test execution.
+ * The pool creates databases in background, hands out one database per test flow,
+ * and performs deferred cleanup and final shutdown cleanup.
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class DatabasePool {
 
+    /**
+     * Maximum number of pre-created databases to keep ready in the pool.
+     */
     private static final int MAX_POOLED_DBS = 6;
+
+    /**
+     * Number of threads for creating new databases in parallel.
+     */
     private static final int DB_CREATION_THREAD_POOL_SIZE = Math.max(2, MAX_POOLED_DBS / 4);
+
+    /**
+     * Maximum databases to queue for deletion before forcing cleanup.
+     */
     private static final int MAX_PENDING_FOR_DELETION_QUEUE_SIZE = MAX_POOLED_DBS / 2;
 
     private final DatabaseTemplateService databaseTemplateService;
@@ -105,6 +116,7 @@ public class DatabasePool {
 
             logPendingCreationsOnShutdown();
 
+            // TODO most probably, we don't need cleanup at all
             cleanupAllDatabases();
         } catch (Exception e) {
             log.error("Error during DatabasePool shutdown", e);
@@ -282,7 +294,7 @@ public class DatabasePool {
         return runnable -> createThread(runnable, threadNamePrefix);
     }
 
-    private static @NonNull Thread createThread(Runnable task, String threadNamePrefix) {
+    private static Thread createThread(Runnable task, String threadNamePrefix) {
         Thread thread = new Thread(task);
         thread.setName(threadNamePrefix + thread.threadId());
         thread.setDaemon(true);

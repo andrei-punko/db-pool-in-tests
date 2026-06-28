@@ -16,10 +16,14 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ContainersLifecycleSupport {
 
+    // TODO CONST FOR MEMORY LIMIT
+    // private static final int POSTGRES_CONTAINER_LIMIT_MEGABYTES = 1024;
+
     private static final PostgreSQLContainer POSTGRESQL_CONTAINER = PostgresContainerFactory.create()
             .withLogConsumer(ContainersLifecycleSupport::logOutput);
 
     private static final ForkJoinTask<String> POSTGRESQL_CONTAINER_START_RESULT =
+            // Manually start a container. Autostart is too late (after context is started)
             ForkJoinPool.commonPool().submit(ContainersLifecycleSupport::executeStartDbContainer);
 
     private static void logOutput(OutputFrame outputFrame) {
@@ -29,7 +33,7 @@ public class ContainersLifecycleSupport {
     }
 
     public static void init() {
-        // container startup is scheduled in POSTGRESQL_CONTAINER_START_RESULT
+        // Container is starting in POSTGRESQL_CONTAINER_START_RESULT
     }
 
     private static boolean isTestProfile() {
@@ -48,6 +52,7 @@ public class ContainersLifecycleSupport {
                 waitForDbContainerIsRunning();
                 return POSTGRESQL_CONTAINER.getUsername();
             });
+            // Password is not needed since container is configured with TRUST auth
         }
     }
 
@@ -86,4 +91,5 @@ public class ContainersLifecycleSupport {
         POSTGRESQL_CONTAINER.stop();
         log.warn("stopContainer: Stopped POSTGRESQL_CONTAINER");
     }
+
 }

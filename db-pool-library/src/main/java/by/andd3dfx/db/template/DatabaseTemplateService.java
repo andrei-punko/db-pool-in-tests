@@ -2,9 +2,9 @@ package by.andd3dfx.db.template;
 
 import by.andd3dfx.db.datasource.DataSourceFactory;
 import by.andd3dfx.db.datasource.RoutingDataSource;
-import by.andd3dfx.db.config.TestDatabaseSchemaPreparer;
-import by.andd3dfx.sql.SqlScriptSupport;
+import by.andd3dfx.sql.SqlSupport;
 import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,10 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 
 /**
- * Creates and populates a template database for fast cloning in integration tests.
+ * Creates and manages template database used as a source for fast per-test database cloning.
+ * <p>
+ * Responsibilities include template creation, schema/data initialization,
+ * final template hardening, and dropping temporary/test databases.
  */
 @Slf4j
 @Component
@@ -29,8 +32,7 @@ public class DatabaseTemplateService {
     private String hikariSchemaName;
 
     private final DataSourceFactory dataSourceFactory;
-    private final SqlScriptSupport sqlScriptSupport;
-    private final TestDatabaseSchemaPreparer schemaPreparer;
+    private final SqlSupport sqlSupport;
     private final RoutingDataSource routingDataSource;
     private JdbcClient systemJdbcClient;
 
@@ -87,13 +89,13 @@ public class DatabaseTemplateService {
 
         templateJdbcTemplate.execute("CREATE SCHEMA IF NOT EXISTS " + hikariSchemaName);
         templateJdbcTemplate.execute("ALTER DATABASE " + DB_TEMPLATE_NAME + " SET search_path TO " + hikariSchemaName + ", public");
-        sqlScriptSupport.executeScripts(templateDataSource, "classpath:/db/db-init.sql");
+        sqlSupport.executeScripts(templateDataSource, "classpath:/db/db-init.sql");
         templateJdbcTemplate.execute("SET search_path TO " + hikariSchemaName + ", public");
 
         routingDataSource.putDataSource(TEMPLATE_DATASOURCE_KEY, templateDataSource);
         routingDataSource.withCurrentDb(TEMPLATE_DATASOURCE_KEY, () -> {
-            log.info("Running schema preparation...");
-            schemaPreparer.prepareSchema();
+            log.info("Running schema preparation scripts...");
+            sqlSupport.prepareCurrentSchema();
             log.info("Schema preparation completed successfully");
         });
     }

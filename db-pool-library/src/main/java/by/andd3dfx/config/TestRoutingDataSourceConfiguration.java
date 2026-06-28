@@ -1,8 +1,8 @@
 package by.andd3dfx.config;
 
 import by.andd3dfx.db.datasource.DataSourceFactory;
-import by.andd3dfx.db.pool.DatabasePool;
 import by.andd3dfx.db.datasource.RoutingDataSource;
+import by.andd3dfx.db.pool.DatabasePool;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 
@@ -32,6 +33,11 @@ public class TestRoutingDataSourceConfiguration {
         routing.setTargetDataSources(Map.of(RoutingDataSource.SYSTEM_DB_KEY, systemDataSource));
         routing.afterPropertiesSet();
         return routing;
+    }
+
+    @Bean(name = "dwhJdbcTemplate")
+    NamedParameterJdbcTemplate dwhJdbcTemplate(DataSource dataSource) {
+        return new NamedParameterJdbcTemplate(dataSource);
     }
 
     private DataSource systemDataSource(DataSourceProperties properties) {

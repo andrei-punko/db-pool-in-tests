@@ -15,7 +15,11 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Initializes {@link DatabasePool} on context startup and shuts it down gracefully on context stop.
+ * Manages a pool of pre-created test databases for fast test execution.
+ * Each test gets a fresh database, which is dropped after the test completes.
+ * <p>
+ * <b>Important:</b> This class is designed for SEQUENTIAL tests execution only.
+ * Parallel tests execution requires tracking which database belongs to which test thread.
  */
 @Slf4j
 @Component
@@ -31,8 +35,12 @@ public class DatabasePoolLifecycleService implements SmartLifecycle {
     public void init() {
         databasePool.init();
 
+        // Mark running so DefaultLifecycleProcessor invokes stop() on context close even if
+        // SmartLifecycle.start() was skipped (e.g. bean created after initial lifecycle onRefresh).
         lifecycleRunning.set(true);
 
+        // Fallback when the cached Spring test context is closed on JVM exit (Surefire may not flush late logs).
+        // Multiple refreshes may register several hooks; but triggerShutdown is idempotent - so we protected vs multiple calls of it.
         Runtime.getRuntime().addShutdownHook(new Thread(() -> triggerShutdown("JvmShutdownHook"), "db-pool-jvm-shutdown"));
     }
 

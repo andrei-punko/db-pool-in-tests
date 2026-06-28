@@ -6,7 +6,7 @@ import by.andd3dfx.db.metrics.Metrics;
 import by.andd3dfx.db.pool.DatabasePool;
 import by.andd3dfx.db.pool.DatabasePoolLifecycleService;
 import by.andd3dfx.db.template.DatabaseTemplateService;
-import by.andd3dfx.sql.SqlScriptSupport;
+import by.andd3dfx.sql.SqlSupport;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Profile;
 @Profile("it")
 @Import({
         DataSourceFactory.class,
-        SqlScriptSupport.class,
+        SqlSupport.class,
         DatabaseTemplateService.class,
         DatabasePool.class,
         DatabasePoolLifecycleService.class,

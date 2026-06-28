@@ -1,7 +1,14 @@
 package by.andd3dfx.db.metrics;
 
 /**
- * Collects timing statistics for events (DB creation, pool wait time).
+ * <pre>
+ * Class contains counters grouped together to collect and measure statistics of happened events:
+ * - events count
+ * - total time of all events in milliseconds
+ * - min event time in milliseconds
+ * - max event time in milliseconds
+ * - average duration of event
+ * </pre>
  */
 class TimeCounter {
 
@@ -23,6 +30,7 @@ class TimeCounter {
 
     public synchronized Snapshot snapshot() {
         if (count == 0) {
+            // We need this branch because of non-0 default value of minTime
             return new Snapshot(0, 0, 0, 0, 0);
         }
         return new Snapshot(count, totalTime, minTime, maxTime, totalTime / count);
