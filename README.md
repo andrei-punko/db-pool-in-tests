@@ -13,7 +13,7 @@ A multi-module Maven project: a **library** that provides a pool of isolated Pos
 | Module | Artifact | Purpose |
 |--------|-----------|------------|
 | `db-pool-library` | `by.andd3dfx:db-pool-library` | Pool implementation, `DataSource` routing, Testcontainers helpers, JUnit extension for metrics/logging |
-| `db-pool-example` | `by.andd3dfx:db-pool-example` | Minimal app and a test that demonstrates typical wiring |
+| `db-pool-example` | `by.andd3dfx:db-pool-example` | Minimal app and integration tests that demonstrate typical wiring |
 
 The root `pom.xml` is an aggregator (`packaging pom`) and contains shared `dependencyManagement` for the Testcontainers BOM.
 
