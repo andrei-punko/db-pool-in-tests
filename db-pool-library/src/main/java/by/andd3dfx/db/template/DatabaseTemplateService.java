@@ -1,5 +1,6 @@
 package by.andd3dfx.db.template;
 
+import by.andd3dfx.db.config.TestDatabaseSchemaPreparer;
 import by.andd3dfx.db.datasource.DataSourceFactory;
 import by.andd3dfx.db.datasource.RoutingDataSource;
 import by.andd3dfx.sql.SqlSupport;
@@ -34,6 +35,7 @@ public class DatabaseTemplateService {
     private final DataSourceFactory dataSourceFactory;
     private final SqlSupport sqlSupport;
     private final RoutingDataSource routingDataSource;
+    private final TestDatabaseSchemaPreparer testDatabaseSchemaPreparer;
     private JdbcClient systemJdbcClient;
 
     @PostConstruct
@@ -95,7 +97,7 @@ public class DatabaseTemplateService {
         routingDataSource.putDataSource(TEMPLATE_DATASOURCE_KEY, templateDataSource);
         routingDataSource.withCurrentDb(TEMPLATE_DATASOURCE_KEY, () -> {
             log.info("Running schema preparation scripts...");
-            sqlSupport.prepareCurrentSchema();
+            testDatabaseSchemaPreparer.prepareSchema();
             log.info("Schema preparation completed successfully");
         });
     }
