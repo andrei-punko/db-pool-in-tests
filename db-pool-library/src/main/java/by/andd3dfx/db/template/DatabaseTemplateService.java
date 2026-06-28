@@ -103,7 +103,9 @@ public class DatabaseTemplateService {
     }
 
     private void finalizeTemplate() {
-        executeSystemSql("VACUUM FULL");
+        DataSource templateDataSource = dataSourceFactory.createTemplateDataSource(DB_TEMPLATE_NAME);
+        JdbcTemplate templateJdbcTemplate = new JdbcTemplate(templateDataSource);
+        templateJdbcTemplate.execute("VACUUM FULL");
         executeSystemSql("CHECKPOINT");
 
         executeSystemSql("UPDATE pg_database SET datistemplate = TRUE WHERE datname = '" + DB_TEMPLATE_NAME + "'");
