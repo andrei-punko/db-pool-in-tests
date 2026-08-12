@@ -1,6 +1,5 @@
-package by.andd3dfx.db.pool;
+package by.andd3dfx.db;
 
-import by.andd3dfx.db.metrics.Metrics;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

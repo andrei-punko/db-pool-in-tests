@@ -1,4 +1,4 @@
-package by.andd3dfx.db.datasource;
+package by.andd3dfx.db;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

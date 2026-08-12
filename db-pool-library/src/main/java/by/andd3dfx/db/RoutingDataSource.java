@@ -1,6 +1,5 @@
-package by.andd3dfx.db.datasource;
+package by.andd3dfx.db;
 
-import by.andd3dfx.db.pool.DatabasePool;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

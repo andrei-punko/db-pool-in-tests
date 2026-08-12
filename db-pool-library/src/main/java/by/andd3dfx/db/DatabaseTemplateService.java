@@ -1,11 +1,8 @@
-package by.andd3dfx.db.template;
+package by.andd3dfx.db;
 
-import by.andd3dfx.db.config.TestDatabaseSchemaPreparer;
-import by.andd3dfx.db.datasource.DataSourceFactory;
-import by.andd3dfx.db.datasource.RoutingDataSource;
+import by.andd3dfx.config.TestDatabaseSchemaPreparer;
 import by.andd3dfx.sql.SqlSupport;
 import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

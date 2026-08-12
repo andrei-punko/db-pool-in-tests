@@ -1,6 +1,6 @@
 package by.andd3dfx.example;
 
-import by.andd3dfx.db.config.TestDatabaseSchemaPreparer;
+import by.andd3dfx.config.TestDatabaseSchemaPreparer;
 import by.andd3dfx.sql.SqlSupport;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

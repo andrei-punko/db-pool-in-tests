@@ -1,7 +1,7 @@
 package by.andd3dfx.example;
 
-import by.andd3dfx.db.pool.DatabasePoolLifecycleService;
-import by.andd3dfx.db.pool.DatabasePoolTimeLoggingExtension;
+import by.andd3dfx.db.DatabasePoolLifecycleService;
+import by.andd3dfx.db.DatabasePoolTimeLoggingExtension;
 import by.andd3dfx.testcontainers.ContainersLifecycleSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.extension.ExtendWith;

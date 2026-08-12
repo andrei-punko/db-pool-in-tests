@@ -1,4 +1,4 @@
-package by.andd3dfx.db.pool;
+package by.andd3dfx.db;
 
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;

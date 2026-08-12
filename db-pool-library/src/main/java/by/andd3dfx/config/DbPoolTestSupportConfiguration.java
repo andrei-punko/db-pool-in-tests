@@ -1,11 +1,10 @@
-package by.andd3dfx.db.config;
+package by.andd3dfx.config;
 
-import by.andd3dfx.config.TestRoutingDataSourceConfiguration;
-import by.andd3dfx.db.datasource.DataSourceFactory;
-import by.andd3dfx.db.metrics.Metrics;
-import by.andd3dfx.db.pool.DatabasePool;
-import by.andd3dfx.db.pool.DatabasePoolLifecycleService;
-import by.andd3dfx.db.template.DatabaseTemplateService;
+import by.andd3dfx.db.DataSourceFactory;
+import by.andd3dfx.db.Metrics;
+import by.andd3dfx.db.DatabasePool;
+import by.andd3dfx.db.DatabasePoolLifecycleService;
+import by.andd3dfx.db.DatabaseTemplateService;
 import by.andd3dfx.sql.SqlSupport;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;

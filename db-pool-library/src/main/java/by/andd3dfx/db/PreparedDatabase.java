@@ -1,4 +1,4 @@
-package by.andd3dfx.db.model;
+package by.andd3dfx.db;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Class contains name of created DB or an error in case of failed creation
  */
-public record PreparedDatabase(String databaseName, Throwable error) {
+record PreparedDatabase(String databaseName, Throwable error) {
 
     public boolean isSuccess() {
         return databaseName != null && error == null;

@@ -1,4 +1,4 @@
-package by.andd3dfx.db.metrics;
+package by.andd3dfx.db;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DurationFormatUtils;

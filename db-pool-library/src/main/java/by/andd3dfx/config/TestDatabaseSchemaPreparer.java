@@ -1,4 +1,4 @@
-package by.andd3dfx.db.config;
+package by.andd3dfx.config;
 
 /**
  * Optional schema preparation step for the template database after {@code db-init.sql}.

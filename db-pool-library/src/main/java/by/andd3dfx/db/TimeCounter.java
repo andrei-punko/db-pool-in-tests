@@ -1,4 +1,4 @@
-package by.andd3dfx.db.metrics;
+package by.andd3dfx.db;
 
 /**
  * <pre>

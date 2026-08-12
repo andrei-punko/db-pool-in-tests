@@ -1,6 +1,6 @@
 package by.andd3dfx.example;
 
-import by.andd3dfx.db.config.TestDatabaseSchemaPreparer;
+import by.andd3dfx.config.TestDatabaseSchemaPreparer;
 import by.andd3dfx.sql.SqlSupport;
 
 public class ExampleTestDatabaseSchemaPreparer implements TestDatabaseSchemaPreparer {

@@ -1,8 +1,8 @@
 package by.andd3dfx.config;
 
-import by.andd3dfx.db.datasource.DataSourceFactory;
-import by.andd3dfx.db.datasource.RoutingDataSource;
-import by.andd3dfx.db.pool.DatabasePool;
+import by.andd3dfx.db.DataSourceFactory;
+import by.andd3dfx.db.RoutingDataSource;
+import by.andd3dfx.db.DatabasePool;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;

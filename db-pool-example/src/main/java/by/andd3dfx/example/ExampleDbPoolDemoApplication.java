@@ -1,6 +1,6 @@
 package by.andd3dfx.example;
 
-import by.andd3dfx.db.config.DbPoolTestSupportConfiguration;
+import by.andd3dfx.config.DbPoolTestSupportConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
